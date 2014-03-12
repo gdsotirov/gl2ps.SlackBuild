@@ -19,7 +19,7 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: gl2ps.SlackBuild,v 1.1 2014/03/12 12:19:31 gsotirov Exp $
+# $Id: gl2ps.SlackBuild,v 1.2 2014/03/12 15:28:46 gsotirov Exp $
 #
 
 . ../../slack-package.conf
@@ -68,10 +68,18 @@ cmake -LAH \
 make VERBOSE=1 -j4 || exit 5
 make DESTDIR=$PKG install || exit 6
 
+# Remove static library
+(cd $PKG/usr/lib${LIBDIRSUFFIX}; rm -f *.a)
+
 # Prepare
 bin_perms $PKG
 ( cd $PKG; strip_bin; strip_lib )
 ( cd $SRC; create_docs $PKG $NAME-$VERSION )
+# Fix docs
+( cd $PKG/usr/doc/$NAME-$VERSION;
+  cp -a $PKG/usr/share/doc/$NAME/COPYING.LGPL COPYING
+  mv README.txt README
+)
 
 install -m 755 -d $PKG/install
 install -m 644 $CWD/slack-desc     $PKG/install/slack-desc
