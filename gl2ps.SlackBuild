@@ -19,7 +19,7 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: gl2ps.SlackBuild,v 1.3 2016/10/23 06:00:11 gsotirov Exp $
+# $Id: gl2ps.SlackBuild,v 1.4 2016/10/23 06:12:25 gsotirov Exp $
 #
 
 . ../../slack-package.conf
@@ -58,7 +58,6 @@ fix_source
 # Configure
 cmake -LAH \
       -DCMAKE_C_FLAGS="$SLKCFLAGS" \
-      -DCMAKE_CXX_FLAGS="$SLKCFLAGS" \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_PREFIX=/usr \
       -DLIB_SUFFIX=${LIBDIRSUFFIX} \
@@ -76,10 +75,10 @@ bin_perms $PKG
 ( cd $PKG; strip_bin; strip_lib )
 ( cd $SRC; create_docs $PKG ${NAME}-${VERSION} )
 # Fix docs
-( cd $PKG/usr/doc/${NAME}-${VERSION};
-  cp -a $PKG/usr/share/doc/$NAME/COPYING.LGPL COPYING
-  mv README.txt README
-)
+DOCSDIR=$PKG/usr/doc/${NAME}-${VERSION}
+mv $PKG/usr/share/doc/${NAME}/* $DOCSDIR
+( cd $PKG/usr; rmdir -p share/doc/${NAME} )
+( cd $DOCSDIR; mv COPYING.LGPL COPYING; mv README.txt README )
 
 install -m 755 -d $PKG/install
 install -m 644 $CWD/slack-desc     $PKG/install/slack-desc
