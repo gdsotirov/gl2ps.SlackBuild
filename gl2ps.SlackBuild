@@ -81,14 +81,14 @@ mv $PKG/usr/share/doc/${NAME}/* $DOCSDIR
 ( cd $DOCSDIR; mv COPYING.LGPL COPYING; mv README.txt README )
 
 install -m 755 -d $PKG/install
-install -m 644 $CWD/slack-desc     $PKG/install/slack-desc
-install -m 644 $CWD/slack-required $PKG/install/slack-required
+install -m 644 -p $CWD/slack-desc     $PKG/install/slack-desc
+install -m 644 -p $CWD/slack-required $PKG/install/slack-required
 
 SBDIR=$PKG/usr/src/slackbuilds/${NAME}-${VERSION}
 install -m 755 -d $SBDIR
-install -m 644 $CWD/slack-desc         $SBDIR/slack-desc
-install -m 644 $CWD/slack-required     $SBDIR/slack-required
-install -m 644 $CWD/${NAME}.SlackBuild $SBDIR/${NAME}.SlackBuild
+install -m 644 -p $CWD/slack-desc         $SBDIR/slack-desc
+install -m 644 -p $CWD/slack-required     $SBDIR/slack-required
+install -m 644 -p $CWD/${NAME}.SlackBuild $SBDIR/${NAME}.SlackBuild
 
 # Assemble
 PKGNAME=${NAME}-${VERSION}-${ARCH}-${BUILD}${MYIN}
