@@ -53,16 +53,17 @@ tar --extract --verbose --file=$CWD/${NAME}-${VERSION}.tgz || exit 3
 cd $SRC
 fix_source
 
-# Configure
+# Configure, build & install
+mkdir build; cd build
 cmake -LAH \
       -DCMAKE_C_FLAGS="$SLKCFLAGS" \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_PREFIX=/usr \
       -DLIB_SUFFIX=${LIBDIRSUFFIX} \
-      -DCMAKE_EXE_LINKER_FLAGS:STRING="-lm" || exit 4
+      -DOpenGL_GL_PREFERENCE=GLVND \
+      .. || exit 4
 
-# Build & install
-make VERBOSE=1 --jobs 4 || exit 5
+make VERBOSE=1 --jobs || exit 5
 make DESTDIR=$PKG install || exit 6
 
 # Remove static library
